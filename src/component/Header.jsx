@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import '../style/header.css';
+import { useSelector } from 'react-redux';
 
 const Header = () => {
-
+    let {cartCounter} = useSelector(store=>(store.cart))
     return (
         <>
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -22,7 +23,7 @@ const Header = () => {
                             <div class="cart-wrapper mt-1">
                                 <div class="cart-icon">
                                     <i class="fa fa-shopping-cart"></i>
-                                    <span class="cart-count">3</span>
+                                    <span class="cart-count">{cartCounter}</span>
                                 </div>
                             </div>
                             <button class="btn btn-outline-success" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"><i class="fa-solid fa-cart-shopping"></i></button>

@@ -43,10 +43,34 @@ export const cartSlice = createSlice({
             }
 
         },
+
+        increaseCount: (state, action) => {
+            let index = action.payload;
+            state.cartList[index].quantity = state.cartList[index].quantity + 1;
+            state.cartCounter = state.cartCounter + 1;
+            localStorage.setItem('cartList', JSON.stringify(state.cartList));
+        },
+
+        decreaseCount: (state, action) => {
+            let index = action.payload;
+            if (state.cartList[index].quantity > 1) {
+                state.cartList[index].quantity = state.cartList[index].quantity - 1;
+                state.cartCounter = state.cartCounter - 1;
+                localStorage.setItem('cartList', JSON.stringify(state.cartList));
+            }
+        },
+
+        removeFromCart: (state, action) => {
+            let index = action.payload;
+            let item = state.cartList[index]
+            state.cartCounter = state.cartCounter - item.quantity;
+            state.cartList.splice(action.payload, 1);
+            localStorage.setItem('cartList', JSON.stringify(state.cartList));
+        }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addToCart } = cartSlice.actions
+export const { addToCart, increaseCount, decreaseCount, removeFromCart } = cartSlice.actions
 
 export default cartSlice.reducer

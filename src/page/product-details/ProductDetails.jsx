@@ -2,9 +2,14 @@ import React, { useEffect, useState } from 'react'
 import data from '../../data'
 import { useParams } from 'react-router-dom';
 import "../../style/cart.css"
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../redux/cart-store/cartSlice';
 export default function ProductDetails() {
+    let dispatch = useDispatch();
     let { name } = useParams();
     const [productData, setProductData] = useState({})
+    const [quantity, setQuantity] = useState(1);
+
     function getProductData() {
         for (let i = 0; i < data.length; i++) {
             if (data[i].rname == name) {
@@ -12,6 +17,21 @@ export default function ProductDetails() {
                 break;
             }
         }
+    }
+    function increaseQuantity() {
+        let inc = quantity + 1
+        setQuantity(inc)
+    }
+    function decreaseQuantity() {
+        if (quantity > 1) {
+            let dec = quantity - 1
+            setQuantity(dec)
+        }
+
+    }
+    function handleAddingToCart(data) {
+        dispatch(addToCart({ data: data, quantity: quantity }));
+        setQuantity(1);
     }
     useEffect(() => {
         getProductData();
@@ -39,15 +59,17 @@ export default function ProductDetails() {
                                 <br />
                                 <p class="card-text" style={{ fontWeight: 600 }}>OverView: {productData?.somedata}</p>
                                 <div class="wrapper">
-                                    <button class="cart-btn btn--minus" type="button" name="button">
+                                    <button class="cart-btn btn--minus" type="button" name="button" onClick={decreaseQuantity}>
                                         -
                                     </button>
-                                    <input class="quantity" type="text" name="name" value={5} />
-                                    <button class="cart-btn btn--plus" type="button" name="button">
+                                    <input class="quantity" type="text" name="name" value={quantity} />
+                                    <button class="cart-btn btn--plus" type="button" name="button" onClick={increaseQuantity}>
                                         +
                                     </button>
                                 </div>
-                                <a href="javascript:void(0)" class="btn btn-outline-success mt-4" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight">Add to cart</a>
+                                <a href="javascript:void(0)" class="btn btn-outline-success mt-4" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" onClick={() => {
+                                    handleAddingToCart(productData)
+                                }}>Add to cart</a>
                             </div>
                         </div>
                     </div>
